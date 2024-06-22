@@ -3,27 +3,36 @@
 import { Dispatch, SetStateAction, useState } from "react";
 import { generate } from "../actions";
 
-export const Form = ({ setOutput }: { setOutput: Dispatch<SetStateAction<string>> }) => {
+export const Form = ({ setOutput, setLoading, loading }: { setOutput: Dispatch<SetStateAction<string>>, setLoading: Dispatch<SetStateAction<boolean>>, loading: boolean }) => {
     const [prompt, setPrompt] = useState("");
     // const [output, setOutput] = useState("");
 
 
     const handleSubmit = async (e: React.FormEvent) => {
+        if (loading) return;
         e.preventDefault();
-        generate(prompt).then((text) => {
+        setLoading(true);
+        try {
+            const text = await generate(prompt); // Assuming generate function returns a Promise
             setOutput(text);
-        });
+        } catch (error) {
+            console.error('Error generating output:', error);
+            setOutput('Error occurred.'); // Handle error setting output
+        } finally {
+            setLoading(false); // Set loading to false after async operation completes (success or error)
+        }
     };
 
     return (
         <form className="flex flex-row gap-4" onSubmit={handleSubmit}>
             <input
-                className="bg-white p-2 text-black border-2 border-black rounded-full"
+                className="bg-white p-2 text-black border-2 border-black rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary"
                 type="text"
+                placeholder="Ask me anything!"
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
             />
-            <button className="bg-blue-500 p-2 rounded-2xl" type="submit">Submit</button>
+            <button disabled={prompt.trim().replace("  ", " ").length === 0 || loading} className="bg-primary p-2 rounded-2xl disabled:bg-neutral-800" type="submit">Submit</button>
         </form>
     );
 }

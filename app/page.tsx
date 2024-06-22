@@ -3,7 +3,7 @@ import Home from "./components/Home";
 
 export default function Page() {
     return (
-        <div className="bg-black w-screen h-screen flex flex-col justify-center items-center">
+        <div className="bg-black w-screen h-screen flex flex-col justify-center items-center box-border">
             <Header />
             <Home />
         </div>

@@ -10,8 +10,8 @@ const LoadingSpinner = () => {
 
 export const Output = ({ output, loading }: { output: string, loading: boolean }) => {
     return (
-        <div className="bg-white p-4 text-black border-2 border-black rounded-lg h-auto w-full text-center">
-            {loading ? <LoadingSpinner /> : <p>{output || "HI!"}</p>}
+        <div className="bg-neutral-300 p-4 text-neutral-900 border-2 border-black rounded-lg w-full flex-1 flex flex-col justify-end">
+            {loading ? <LoadingSpinner /> : <p>{output || "..."}</p>}
         </div>
     )
 }

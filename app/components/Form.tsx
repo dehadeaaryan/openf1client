@@ -5,21 +5,19 @@ import { generate } from "../actions";
 
 export const Form = ({ setOutput, setLoading, loading }: { setOutput: Dispatch<SetStateAction<string>>, setLoading: Dispatch<SetStateAction<boolean>>, loading: boolean }) => {
     const [prompt, setPrompt] = useState("");
-    // const [output, setOutput] = useState("");
-
 
     const handleSubmit = async (e: React.FormEvent) => {
         if (loading) return;
         e.preventDefault();
         setLoading(true);
         try {
-            const text = await generate(prompt); // Assuming generate function returns a Promise
+            const text = await generate(prompt);
             setOutput(text);
         } catch (error) {
             console.error('Error generating output:', error);
-            setOutput('Error occurred.'); // Handle error setting output
+            setOutput('Error occurred.');
         } finally {
-            setLoading(false); // Set loading to false after async operation completes (success or error)
+            setLoading(false);
         }
     };
 

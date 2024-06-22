@@ -40,8 +40,8 @@ const Page = async ({ params }: { params: { key: string } }) => {
             </h1>
             <div className="w-full flex flex-col gap-4">
                 {positions.map((driver: DriverInfoWithPosition) => (
-                    <div key={driver.driver_number} className={`w-full px-8 py-4 flex gap-12 border-4 rounded-2xl items-center bg-neutral-200 text-neutral-900`} style={{ borderColor: `#${driver.team_colour}` }}>
-                        <p className="text-sm md:text-2xl text-neutral-900 w-8">{driver.position}</p>
+                    <div key={driver.driver_number} className={`w-full p-4 flex gap-12 border-4 rounded-2xl items-center text-neutral-200`} style={{ borderColor: `#${driver.team_colour}` }}>
+                        <p className="text-sm md:text-2xl w-8">{driver.position}</p>
                         <div className="text-xs md:text-lg flex flex-row gap-4 justify-between items-center w-full">
                             <p>{driver.broadcast_name}</p>
                             <p className="hidden md:flex">{driver.team_name}</p>

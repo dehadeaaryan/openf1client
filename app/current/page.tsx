@@ -32,12 +32,12 @@ const Page = async () => {
                 <h1 className="text-neutral-200 text-xl md:text-3xl">Race Weekend</h1>
                 {sessions.map((session: any) => (
                     <Link key={session.session_key} href={`/current/session/${session.session_key}`}>
-                        <div className="w-full p-4 flex gap-12 items-center bg-neutral-200 text-neutral-900 rounded-lg">
-                            <div className="text-xs md:text-lg flex flex-col">
+                        <div className="w-full p-4 flex items-center border-4 border-primary rounded-xl hover:text-primary transition-all">
+                            <div className="text-xs sm:text-lg flex flex-col w-1/2 sm:w-1/4 items-start">
                                 <p>{dateStringToDateString(session.date_start)}</p>
                                 <p>{dateStringToTimeString(session.date_start)}</p>
                             </div>
-                            <p className="text-sm md:text-2xl text-neutral-900">{session.session_name}</p>
+                            <p className="text-sm sm:text-2xl w-1/2 sm:w-3/4 text-start">{session.session_name}</p>
                         </div>
                     </Link>
                 ))}

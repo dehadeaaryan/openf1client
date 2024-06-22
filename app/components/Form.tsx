@@ -24,9 +24,9 @@ export const Form = ({ setOutput, setLoading, loading }: { setOutput: Dispatch<S
     };
 
     return (
-        <form className="flex flex-row gap-4" onSubmit={handleSubmit}>
+        <form className="flex flex-row gap-4 w-full" onSubmit={handleSubmit}>
             <input
-                className="bg-white p-2 text-black border-2 border-black rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary"
+                className="bg-background p-2 text-neutral-200 border-2 border-black w-full rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary"
                 type="text"
                 placeholder="Ask me anything!"
                 value={prompt}

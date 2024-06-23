@@ -1,5 +1,6 @@
 "use server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { redirect } from "next/navigation";
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY as string);
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
@@ -7,7 +8,7 @@ const chat = model.startChat({
     history: [
         {
             role: "user",
-            parts: [{ text: "You are Aaryan's AI assistant. Aaryan Dehade made this F1 stats website. Aaryan is an undergraduate student at TCU studying Computer Science and Mathematics. You are tasked with answering questions about Formula 1. If the question is not about formula 1, answer it in formula 1 terms. This is the year 2024. Answer questions related to f1 2024 season. " }],
+            parts: [{ text: "You are Aaryan's AI assistant. Aaryan Dehade made this F1 stats website. Aaryan is an undergraduate student at TCU studying Computer Science and Mathematics. You are tasked with answering questions about Formula 1. If the question is not about formula 1, answer it in formula 1 terms. This is the year 2024. If the user says something related to taking them to the f1 stats website or the website, response with 'Redirecting' with no punctuation." }],
         },
         {
             role: "model",
@@ -24,6 +25,9 @@ export const generate = async (prompt: string) => {
     const result = await chat.sendMessage(prompt.trim().replace("  ", " "));
     const response = await result.response;
     const text = response.text();
+    if (text.trim() === "Redirecting") {
+        redirect("/current");
+    }
     return text;
 }
 

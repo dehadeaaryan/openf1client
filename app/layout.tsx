@@ -14,6 +14,9 @@ export default function RootLayout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+    if ('virtualKeyboard' in navigator) {
+        (navigator as any).virtualKeyboard.overlaysContent = true;
+    }
     return (
         <html lang="en">
             <body className={inter.className}>{children}</body>

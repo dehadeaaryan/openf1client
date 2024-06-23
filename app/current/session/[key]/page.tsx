@@ -28,10 +28,18 @@ const getDriverPositions = async (session_key: string, drivers: DriverInfo[]): P
     return driverPositions;
 }
 
+const getLaps = async (session_key: string, drivers: DriverInfo[]): Promise<DriverInfoWithPosition[]> => {
+    const response = await fetch(`https://api.openf1.org/v1/laps?session_key=${session_key}`);
+    const data = await response.json();
+    return data;
+}
+
 const Page = async ({ params }: { params: { key: string } }) => {
     const session = await getSession(params.key);
     const drivers = await getDrivers(params.key);
     const positions = await getDriverPositions(params.key, drivers);
+    const laps = await getLaps(params.key, drivers);
+    console.log(laps)
     return (<div className="bg-background w-screen h-screen flex flex-col items-center">
         <Header />
         <div className="w-full p-12 flex flex-col gap-4 text-center font-bold">

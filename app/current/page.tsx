@@ -1,9 +1,14 @@
+"use client";
+
 import { Header } from "@/app/components/Header";
 import { dateStringToDateString, dateStringToTimeString } from "../utils";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { Session } from "../types";
+import { LoadingScreen } from "../components/LoadingScreen";
 
 const getLatestMeeting = async () => {
-    const response = await fetch("https://api.openf1.org/v2/meetings?meeting_key=latest", { next: { revalidate: 60 * 60 * 24 } })
+    const response = await fetch("https://api.openf1.org/v2/meetings?meeting_key=latest", { next: { revalidate: 60 * 60 * 6 } })
     const meeting = await response.json();
     return meeting[0];
 }
@@ -15,22 +20,35 @@ const getSessions = async (meeting_key: string) => {
     return sessions;
 }
 
-const Page = async () => {
-    const meeting = await getLatestMeeting();
-    const meeting_key = meeting.meeting_key;
-    const meetingDate = new Date(meeting.date_start);
-    const sessions = await getSessions(meeting_key);
+const Page = () => {
+    const [data, setData] = useState<{
+        meetingName: string,
+        meetingOfficialName: string,
+        meetingDate: string,
+        sessions: Session[],
+        loading: boolean
+    }>({ meetingName: "", meetingOfficialName: "", meetingDate: "", sessions: [], loading: true });
+    useEffect(() => {
+        getLatestMeeting().then((m) => {
+            return { meetingName: m.meeting_name as string, meetingOfficialName: m.meeting_official_name as string, meetingDate: new Date(m.date_start).toDateString() as string, meetingKey: m.meeting_key as string };
+        }).then((d) => {
+            getSessions(d.meetingKey).then((s) => {
+                setData({ meetingName: d.meetingName, meetingOfficialName: d.meetingOfficialName, meetingDate: d.meetingDate, sessions: s, loading: false })
+            })
+        }).catch(console.error);
+    }, [])
+    if (data.loading) return (<LoadingScreen />);
     return (
-        <div className="bg-background w-screen h-screen flex flex-col items-center">
+        <div className="bg-background w-screen min-h-screen flex flex-col items-center">
             <Header />
             <div className="w-full p-12 flex flex-col gap-2 text-center font-bold">
-                <h1 className="text-primary text-4xl md:text-6xl">{meeting.meeting_name}</h1>
-                <p className="text-neutral-200 text-xs md:text-lg">{meeting.meeting_official_name}</p>
-                <p className="text-neutral-200 text-xs">{meetingDate.toDateString()}</p>
+                <h1 className="text-primary text-4xl md:text-6xl">{data.meetingName}</h1>
+                <p className="text-neutral-200 text-xs md:text-lg">{data.meetingOfficialName}</p>
+                <p className="text-neutral-200 text-xs">{data.meetingDate}</p>
             </div>
             <div className="w-full p-12 flex flex-col gap-4 text-center font-bold">
                 <h1 className="text-neutral-200 text-xl md:text-3xl">Race Weekend</h1>
-                {sessions.map((session: any) => (
+                {data.sessions.map((session: any) => (
                     <Link key={session.session_key} href={`/current/session/${session.session_key}`}>
                         <div className="w-full p-4 flex items-center border-4 border-primary rounded-xl hover:text-primary transition-all">
                             <div className="text-xs sm:text-lg flex flex-col w-1/2 sm:w-1/4 items-start">

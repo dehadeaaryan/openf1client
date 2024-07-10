@@ -9,9 +9,7 @@ export const Header = () => {
             </Link>
             <nav>
                 <ul className="text-neutral-900 flex space-x-2">
-                    <li>Meeting</li>
-                    <li>Drivers</li>
-                    <li>Teams</li>
+                    <li><Link href="/">AI</Link></li>
                 </ul>
             </nav>
         </header>
